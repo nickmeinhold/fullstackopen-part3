@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 
 morgan.token("body", (req) => JSON.stringify(req.body));
 
@@ -27,6 +28,7 @@ let persons = [
   },
 ];
 
+app.use(cors());
 app.use(express.json());
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
@@ -91,6 +93,44 @@ app.post("/api/persons", (request, response) => {
   persons = persons.concat(person);
 
   response.json(person);
+});
+
+app.put("/api/persons/:id", (request, response) => {
+  const body = request.body;
+  const id = request.params.id;
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "content missing",
+    });
+  }
+
+  const person = persons.find((p) => p.id === id);
+
+  if (!person) {
+    return response.status(404).end();
+  }
+
+  const updatedPerson = {
+    id: person.id,
+    name: body.name,
+    number: body.number,
+  };
+
+  persons = persons.map((p) => (p.id === id ? updatedPerson : p));
+  response.json(updatedPerson);
+});
+
+app.delete("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+  const person = persons.find((p) => p.id === id);
+
+  if (!person) {
+    return response.status(404).end();
+  }
+
+  persons = persons.filter((p) => p.id !== id);
+  response.status(204).end();
 });
 
 const unknownEndpoint = (request, response) => {
