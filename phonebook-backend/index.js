@@ -1,3 +1,4 @@
+const functions = require("firebase-functions");
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
@@ -139,6 +140,12 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = 3001;
-app.listen(PORT);
-console.log(`Server running on port ${PORT}`);
+// Export as Cloud Function
+exports.api = functions.https.onRequest(app);
+
+// For local development
+const PORT = process.env.PORT || 3001;
+if (require.main === module) {
+  app.listen(PORT);
+  console.log(`Server running on port ${PORT}`);
+}
