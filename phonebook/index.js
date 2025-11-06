@@ -38,6 +38,18 @@ app.get("/api/info", (request, response) => {
   response.json(`Phonebook has information for ${persons.length}`);
 });
 
+app.get("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+
+  if (id >= persons.length) {
+    return response.status(400).json({
+      error: "content missing",
+    });
+  }
+
+  return response.json(persons[id]);
+});
+
 const PORT = 3001;
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);
