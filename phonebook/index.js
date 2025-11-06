@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const phoneBook = [
+const persons = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -30,6 +30,14 @@ app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
 });
 
-app.get("/api/persons", (request, response) => {
-  response.json(notes);
+app.get("/api/all-persons", (request, response) => {
+  response.json(persons);
 });
+
+app.get("/api/info", (request, response) => {
+  response.json(`Phonebook has information for ${persons.length}`);
+});
+
+const PORT = 3001;
+app.listen(PORT);
+console.log(`Server running on port ${PORT}`);
