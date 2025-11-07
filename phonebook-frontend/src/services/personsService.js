@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const baseUrl = "https://api-j7rx7hkrga-uc.a.run.app/";
+const baseUrl = "https://api-j7rx7hkrga-uc.a.run.app";
 
 const getAll = () => {
-  const request = axios.get(`${baseUrl}/api/all-persons`);
+  const request = axios.get(`${baseUrl}/api/persons`);
   return request.then((response) => response.data);
 };
 
