@@ -10,10 +10,16 @@ const redactedUrl = url
 console.log("mongoose readyState at startup:", mongoose.connection.readyState);
 console.log("connecting to", redactedUrl || "<MONGODB_URI not set>");
 
-mongoose.connection.on("connected", () => console.log("mongoose event: connected"));
+mongoose.connection.on("connected", () =>
+  console.log("mongoose event: connected")
+);
 mongoose.connection.on("open", () => console.log("mongoose event: open"));
-mongoose.connection.on("error", (err) => console.error("mongoose event: error", err.message));
-mongoose.connection.on("disconnected", () => console.log("mongoose event: disconnected"));
+mongoose.connection.on("error", (err) =>
+  console.error("mongoose event: error", err.message)
+);
+mongoose.connection.on("disconnected", () =>
+  console.log("mongoose event: disconnected")
+);
 
 mongoose
   .connect(url)
@@ -25,8 +31,22 @@ mongoose
   });
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  number: {
+    type: String,
+    length: 8,
+    required: true,
+    validate: {
+      validator: function (v) {
+        return /^\d{2}-\d{5,8}$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+  },
 });
 
 personSchema.set("toJSON", {

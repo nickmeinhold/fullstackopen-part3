@@ -71,13 +71,13 @@ const App = () => {
           });
       }
     } else {
-      setPersons(persons.concat({ name: newName, number: newNumber }));
       personsService
         .create({
           name: newName,
           number: newNumber,
         })
         .then((response) => {
+          setPersons(persons.concat({ name: newName, number: newNumber }));
           setNotification({
             message: `Added ${newName}`,
             responseStatus: ResponseStatus.SUCCESS,
@@ -88,7 +88,11 @@ const App = () => {
           console.log(response);
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.response.data.error);
+          setNotification({
+            message: `${error.response.data.error}`,
+            responseStatus: ResponseStatus.FAILURE,
+          });
         });
     }
   };

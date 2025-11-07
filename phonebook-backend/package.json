@@ -16,16 +16,22 @@
     "dev": "node --watch index.js",
     "predeploy": "npm run verify",
     "verify": "node -e \"const v=process.versions.node.split('.')[0];if(v<18||v>22){console.error('Unsupported node major',v);process.exit(1)}\" && npm ls --depth=0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
-    "gcp-metadata": "^5.3.0",
     "firebase-admin": "^13.6.0",
     "firebase-functions": "^6.6.0",
+    "gcp-metadata": "^5.3.0",
     "mongoose": "^8.19.3",
     "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@stylistic/eslint-plugin-js": "^4.4.1",
+    "eslint": "^9.39.1"
   }
 }

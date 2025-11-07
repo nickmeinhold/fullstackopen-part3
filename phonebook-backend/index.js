@@ -4,8 +4,6 @@ const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-// Initialize shared DB module (no-op unless used, safe to require)
-require("./db");
 const Person = require("./models/person");
 
 morgan.token("body", (req) => JSON.stringify(req.body));
@@ -68,7 +66,10 @@ app.put("/api/persons/:id", (request, response, next) => {
     return response.status(400).json({ error: "name or number missing" });
   }
   const update = { name: body.name, number: body.number };
-  Person.findByIdAndUpdate(request.params.id, update, { new: true })
+  Person.findByIdAndUpdate(request.params.id, update, {
+    new: true,
+    runValidators: true,
+  })
     .then((updatedPerson) => {
       if (updatedPerson) {
         response.json(updatedPerson);
